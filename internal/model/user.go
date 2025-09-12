@@ -2,7 +2,7 @@ package model
 
 type User struct {
 	// ID is the unique identifier for the user
-	ID int64 `json:"id"`
+	ID int `json:"id"`
 
 	// Name is the first name of the user
 	Name string `json:"name"`

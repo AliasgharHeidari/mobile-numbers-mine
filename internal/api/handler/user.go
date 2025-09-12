@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"strconv"
+
 	"github.com/Golang-Training-entry-3/mobile-numbers/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,7 +22,22 @@ func CreateUser(c *fiber.Ctx) error {
 }
 
 func GetUserByID(c *fiber.Ctx) error {
-	return c.SendString("Get User By ID")
+	userID := c.Params("id")
+	id, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid user ID",
+		})
+	}
+
+	user, err := service.GetUserByID(id)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(user)
 }
 
 func UpdateUserByID(c *fiber.Ctx) error {
