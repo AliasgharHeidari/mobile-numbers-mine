@@ -23,3 +23,12 @@ func GetUserByID(id int) (model.User, error) {
 	return model.User{}, errorMessage
 
 }
+
+func CreateUser(user model.User) (int, error) {
+	newRandomId := len(onmemory.Users) + 1
+
+	user.ID = newRandomId
+
+	onmemory.Users = append(onmemory.Users, user)
+	return newRandomId, nil
+}

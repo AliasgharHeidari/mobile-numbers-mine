@@ -3,6 +3,7 @@ package handler
 import (
 	"strconv"
 
+	"github.com/Golang-Training-entry-3/mobile-numbers/internal/model"
 	"github.com/Golang-Training-entry-3/mobile-numbers/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,7 +19,24 @@ func GetUserList(c *fiber.Ctx) error {
 }
 
 func CreateUser(c *fiber.Ctx) error {
-	return c.SendString("Create User")
+	var newUser model.User
+	if err := c.BodyParser(&newUser); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+		})
+	}
+
+	id, err := service.CreateUser(newUser)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to create user",
+		})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"message": "User created successfully",
+		"user_id": id,
+	})
 }
 
 func GetUserByID(c *fiber.Ctx) error {
