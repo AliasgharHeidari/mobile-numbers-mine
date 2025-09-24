@@ -19,7 +19,7 @@ func GetUserByID(id int) (model.User, error) {
 		}
 	}
 
-	errorMessage := errors.New("User not found")
+	errorMessage := errors.New("user not found")
 	return model.User{}, errorMessage
 
 }
