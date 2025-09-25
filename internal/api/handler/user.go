@@ -3,8 +3,8 @@ package handler
 import (
 	"strconv"
 
-	"github.com/Golang-Training-entry-3/mobile-numbers/internal/model"
-	"github.com/Golang-Training-entry-3/mobile-numbers/internal/service"
+	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/model"
+	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
 
