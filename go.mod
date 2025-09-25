@@ -1,4 +1,4 @@
-module github.com/Golang-Training-entry-3/mobile-numbers
+module github.com/AliasgharHeidari/mobile-numbers-mine
 
 go 1.23.4
 

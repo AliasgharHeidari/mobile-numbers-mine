@@ -3,8 +3,8 @@ package handler
 import (
 	"strconv"
 
-	"github.com/Golang-Training-entry-3/mobile-numbers/internal/model"
-	"github.com/Golang-Training-entry-3/mobile-numbers/internal/service"
+	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/model"
+	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -59,11 +59,50 @@ func GetUserByID(c *fiber.Ctx) error {
 }
 
 func UpdateUserByID(c *fiber.Ctx) error {
-	return c.SendString("Update User By ID")
+	userID := c.Params("id")
+	id, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "invalid User ID",
+		})
+	}
+
+	var updatedUser model.User
+	if err := c.BodyParser(&updatedUser); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+		})
+	}
+
+	if err := service.UpdateUserByID(id, updatedUser); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "User updated successfully",
+	})
 }
 
 func DeleteUserByID(c *fiber.Ctx) error {
-	return c.SendString("Delete User By ID")
+	userID := c.Params("id")
+	id, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "invalid ID",
+		})
+	}
+
+	if err := service.DeleteUserByID(id); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error" : err.Error(),
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message" : "user deleted successfully",
+	})
+
 }
 
 func AddMobileNumber(c *fiber.Ctx) error {

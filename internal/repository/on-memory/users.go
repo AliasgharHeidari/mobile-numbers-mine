@@ -1,6 +1,6 @@
 package onmemory
 
-import "github.com/Golang-Training-entry-3/mobile-numbers/internal/model"
+import "github.com/AliasgharHeidari/mobile-numbers-mine/internal/model"
 
 var Users []model.User
 
