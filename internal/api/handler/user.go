@@ -106,9 +106,49 @@ func DeleteUserByID(c *fiber.Ctx) error {
 }
 
 func AddMobileNumber(c *fiber.Ctx) error {
-	return c.SendString("Add Mobile Number")
+	userID := c.Params("id")
+	id, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error" : "invalid user ID",
+		})
+	}
+	var mobileNumber model.MobileNumber
+	if err := c.BodyParser(&mobileNumber); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error" : "invalid request body",
+ 		})
+	}
+
+	if err := service.AddMobileNumber(id, mobileNumber); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error" : err.Error(),
+		})
+	}
+
+   return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message" : "Mobile Number addded successfully",
+   })
 }
 
 func DeleteMobileNumber(c *fiber.Ctx) error {
-	return c.SendString("Delete Mobile Number")
+	userID := c.Params("id")
+	id , err := strconv.Atoi(userID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error" : "invalid user ID",
+		})
+	}
+
+	number := c.Params("number")
+
+	if err := service.DeleteMobileNumber(id, number); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error" : err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message" : "MobileNumber deleted successfully",
+	})
 }

@@ -35,7 +35,7 @@ func CreateUser(user model.User) (int, error) {
 func UpdateUserByID(id int, updatedUser model.User) error {
 	for i, user := range onmemory.Users {
 		if user.ID == id {
-			updatedUser.ID = id 
+			updatedUser.ID = id
 			onmemory.Users[i] = updatedUser
 			return nil
 		}
@@ -43,14 +43,41 @@ func UpdateUserByID(id int, updatedUser model.User) error {
 	return errors.New("user not found")
 }
 
-func DeleteUserByID (id int) error {
-	for i, user := range onmemory.Users{
+func DeleteUserByID(id int) error {
+	for i, user := range onmemory.Users {
 		if user.ID == id {
 			onmemory.Users = append(onmemory.Users[:i], onmemory.Users[i+1:]...)
 			return nil
 		}
 	}
 
-	return  errors.New("user not found")
+	return errors.New("user not found")
 
+}
+
+func AddMobileNumber(id int, mobileNumbers model.MobileNumber) error {
+	for i, user := range onmemory.Users {
+		if user.ID == id {
+			onmemory.Users[i].MobileNumbers = append(onmemory.Users[i].MobileNumbers, mobileNumbers)
+			return nil
+		}
+	}
+
+	return errors.New("user not found")
+
+}
+
+func DeleteMobileNumber(id int, Number string) error {
+	for i, user := range onmemory.Users {
+		if user.ID == id {
+			for j, mobile := range user.MobileNumbers {
+				if mobile.Number == Number {
+					onmemory.Users[i].MobileNumbers = append(user.MobileNumbers[:j], user.MobileNumbers[j+1:]...)
+					return nil
+				}
+			}
+			return errors.New("MobileNumber not found")
+		}
+	}
+	return errors.New("error : user not found")
 }
