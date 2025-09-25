@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"log"
-
 	"github.com/Golang-Training-entry-3/mobile-numbers/internal/api/handler"
 	"github.com/gofiber/fiber/v2"
 )
