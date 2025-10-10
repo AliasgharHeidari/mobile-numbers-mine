@@ -8,12 +8,12 @@ import (
 )
 
 func GetUserList() ([]model.User, error) {
-	users := onmemory.Users
+	users := onmemory.UsersRepo.Users
 	return users, nil
 }
 
 func GetUserByID(id int) (model.User, error) {
-	for _, user := range onmemory.Users {
+	for _, user := range onmemory.UsersRepo.Users {
 		if user.ID == id {
 			return user, nil
 		}
@@ -25,14 +25,20 @@ func GetUserByID(id int) (model.User, error) {
 }
 
 func CreateUser(user model.User) (int, error) {
-	newRandomId := len(onmemory.Users) + 1
+	onmemory.UsersRepo.UserChangeMutex.Lock()
+	defer onmemory.UsersRepo.UserChangeMutex.Unlock()
+
+	newRandomId := len(onmemory.UsersRepo.Users) + 1
 
 	user.ID = newRandomId
 
-	onmemory.Users = append(onmemory.Users, user)
+	onmemory.UsersRepo.Users = append(onmemory.UsersRepo.Users, user)
 	return newRandomId, nil
 }
 func UpdateUserByID(id int, updatedUser model.User) error {
+	onmemory.UserChangeMutex.Lock()
+	defer onmemory.UserChangeMutex.Unlock()
+
 	for i, user := range onmemory.Users {
 		if user.ID == id {
 			updatedUser.ID = id
