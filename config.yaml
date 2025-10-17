@@ -1,0 +1,19 @@
+api:
+  server:
+    listen_address: "127.0.0.1"
+    listen_port: 9898
+  jwt:
+    secret_key: "some_secure_and_random_key"
+  cors:
+    allowed_origins:
+      - "http://localhost:3000"
+      - "https://yourdomain.com"
+    allowed_methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+    allowed_headers:
+      - "Content-Type"
+      - "Authorization"
+    allow_credentials: true
