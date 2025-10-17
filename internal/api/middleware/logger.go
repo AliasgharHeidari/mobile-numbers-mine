@@ -1,4 +1,4 @@
-package logger
+package middleware
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ func Logger() fiber.Handler {
 		status := c.Response().StatusCode()
 
 		log := fmt.Sprintf(
-			"%s[%s] | %d | %s | %.1fms",
+			"%s | [%s] | %d | %s | %.1fms",
 			time.Now().Format("15:04:05"),
 			path,
 			status,

@@ -3,15 +3,16 @@ package apiserver
 import (
 	"log"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/handler"
-	logger "github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/middleware"
+	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 
 func Start() {
 	app := fiber.New()
 
-	app.Use(logger.Logger())
+	app.Use(middleware.Logger())
 
+	app.Post("/user/login", handler.Login)
 	// User CRUD routes
 	app.Get("/user", handler.GetUserList)
 	app.Get("/user/:id", handler.GetUserByID)

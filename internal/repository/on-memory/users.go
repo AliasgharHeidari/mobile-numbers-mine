@@ -1,14 +1,36 @@
 package onmemory
 
-import "github.com/AliasgharHeidari/mobile-numbers-mine/internal/model"
+import (
+	"sync"
+	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/model"
+)
+type UserData struct {
+	Users []model.User
+	UserChangeMutex *sync.Mutex
+}
 
-var Users []model.User
+var UsersRepo UserData
 
 func LoadInitUsers() {
-	Users = append(Users, model.User{
-		ID:         1,
-		Name:       "Ashva",
-		FamilyName: "Patel",
-		Age:        24,
-		IsMarried:  false})
+	UsersRepo = UserData{}
+	UsersRepo.Users = []model.User{
+		{
+			ID:     1,
+			Name:   "Ali",
+			FamilyName: "Heidari",
+			Age: 18,
+			IsMarried: false,
+		},
+
+		{
+			ID :   	2,
+			Name: "Amir",
+			FamilyName: "Barkhordari",
+			Age: 21,
+			IsMarried: false,
+		},
+	}
+
+	UsersRepo.UserChangeMutex = &sync.Mutex{}
+
 }
