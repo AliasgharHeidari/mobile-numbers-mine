@@ -1,9 +1,10 @@
 api:
   server:
     listen_address: "127.0.0.1"
-    listen_port: 9898
+    listen_port: "9898"
   jwt:
     secret_key: "some_secure_and_random_key"
+    expiration_minutes: 60
   cors:
     allowed_origins:
       - "http://localhost:3000"

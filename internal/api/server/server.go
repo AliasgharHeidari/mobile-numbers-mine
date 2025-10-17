@@ -2,8 +2,10 @@ package apiserver
 
 import (
 	"log"
+
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/handler"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/middleware"
+	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/config"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -24,5 +26,5 @@ func Start() {
 	app.Post("/user/:id/mobile-number", handler.AddMobileNumber)
 	app.Delete("/user/:id/mobile-number/:number", handler.DeleteMobileNumber)
 
-	log.Println(app.Listen(":8080"))
+	log.Println(app.Listen(config.AppConfig.API.Server.ListenString()))
 }
