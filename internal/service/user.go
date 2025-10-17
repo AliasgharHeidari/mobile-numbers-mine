@@ -8,12 +8,12 @@ import (
 )
 
 func GetUserList() ([]model.User, error) {
-	users := onmemory.Users
+	users := onmemory.UsersRepo.Users
 	return users, nil
 }
 
 func GetUserByID(id int) (model.User, error) {
-	for _, user := range onmemory.Users {
+	for _, user := range onmemory.UsersRepo.Users {
 		if user.ID == id {
 			return user, nil
 		}
@@ -25,18 +25,22 @@ func GetUserByID(id int) (model.User, error) {
 }
 
 func CreateUser(user model.User) (int, error) {
-	newRandomId := len(onmemory.Users) + 1
+	onmemory.UsersRepo.UserChangeMutex.Lock()
+	defer onmemory.UsersRepo.UserChangeMutex.Unlock()
+	newRandomId := len(onmemory.UsersRepo.Users) + 1
 
 	user.ID = newRandomId
 
-	onmemory.Users = append(onmemory.Users, user)
+	onmemory.UsersRepo.Users = append(onmemory.UsersRepo.Users, user)
 	return newRandomId, nil
 }
 func UpdateUserByID(id int, updatedUser model.User) error {
-	for i, user := range onmemory.Users {
+	onmemory.UsersRepo.UserChangeMutex.Lock()
+	defer onmemory.UsersRepo.UserChangeMutex.Unlock()
+	for i, user := range onmemory.UsersRepo.Users {
 		if user.ID == id {
 			updatedUser.ID = id
-			onmemory.Users[i] = updatedUser
+			onmemory.UsersRepo.Users[i] = updatedUser
 			return nil
 		}
 	}
@@ -44,9 +48,9 @@ func UpdateUserByID(id int, updatedUser model.User) error {
 }
 
 func DeleteUserByID(id int) error {
-	for i, user := range onmemory.Users {
+	for i, user := range onmemory.UsersRepo.Users {
 		if user.ID == id {
-			onmemory.Users = append(onmemory.Users[:i], onmemory.Users[i+1:]...)
+			onmemory.UsersRepo.Users = append(onmemory.UsersRepo.Users[:i], onmemory.UsersRepo.Users[i+1:]...)
 			return nil
 		}
 	}
@@ -56,9 +60,9 @@ func DeleteUserByID(id int) error {
 }
 
 func AddMobileNumber(id int, mobileNumbers model.MobileNumber) error {
-	for i, user := range onmemory.Users {
+	for i, user := range onmemory.UsersRepo.Users {
 		if user.ID == id {
-			onmemory.Users[i].MobileNumbers = append(onmemory.Users[i].MobileNumbers, mobileNumbers)
+			onmemory.UsersRepo.Users[i].MobileNumbers = append(onmemory.UsersRepo.Users[i].MobileNumbers, mobileNumbers)
 			return nil
 		}
 	}
@@ -68,11 +72,11 @@ func AddMobileNumber(id int, mobileNumbers model.MobileNumber) error {
 }
 
 func DeleteMobileNumber(id int, Number string) error {
-	for i, user := range onmemory.Users {
+	for i, user := range onmemory.UsersRepo.Users {
 		if user.ID == id {
 			for j, mobile := range user.MobileNumbers {
 				if mobile.Number == Number {
-					onmemory.Users[i].MobileNumbers = append(user.MobileNumbers[:j], user.MobileNumbers[j+1:]...)
+					onmemory.UsersRepo.Users[i].MobileNumbers = append(user.MobileNumbers[:j], user.MobileNumbers[j+1:]...)
 					return nil
 				}
 			}
