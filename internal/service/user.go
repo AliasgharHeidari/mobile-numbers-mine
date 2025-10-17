@@ -21,22 +21,22 @@ func GetUserByID(id int) (model.User, error) {
 
 	errorMessage := errors.New("user not found")
 	return model.User{}, errorMessage
-
 }
 
 func CreateUser(user model.User) (int, error) {
 	onmemory.UsersRepo.UserChangeMutex.Lock()
 	defer onmemory.UsersRepo.UserChangeMutex.Unlock()
+
 	newRandomId := len(onmemory.UsersRepo.Users) + 1
-
 	user.ID = newRandomId
-
 	onmemory.UsersRepo.Users = append(onmemory.UsersRepo.Users, user)
+
 	return newRandomId, nil
 }
 func UpdateUserByID(id int, updatedUser model.User) error {
 	onmemory.UsersRepo.UserChangeMutex.Lock()
 	defer onmemory.UsersRepo.UserChangeMutex.Unlock()
+
 	for i, user := range onmemory.UsersRepo.Users {
 		if user.ID == id {
 			updatedUser.ID = id
@@ -44,6 +44,7 @@ func UpdateUserByID(id int, updatedUser model.User) error {
 			return nil
 		}
 	}
+
 	return errors.New("user not found")
 }
 
@@ -56,7 +57,6 @@ func DeleteUserByID(id int) error {
 	}
 
 	return errors.New("user not found")
-
 }
 
 func AddMobileNumber(id int, mobileNumbers model.MobileNumber) error {
@@ -68,7 +68,6 @@ func AddMobileNumber(id int, mobileNumbers model.MobileNumber) error {
 	}
 
 	return errors.New("user not found")
-
 }
 
 func DeleteMobileNumber(id int, Number string) error {
