@@ -13,6 +13,7 @@ func Start() {
 	app := fiber.New()
 
 	app.Use(middleware.Logger())
+	app.Use(middleware.CorsMiddleware())
 
 	app.Post("/user/login", handler.Login)
 	// User CRUD routes
