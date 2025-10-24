@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func JwtProtectedMiddleware(c *fiber.Ctx) error {
+func ValidateToken(c *fiber.Ctx) error {
 	authHeader := c.Get("Authorization")
 	if authHeader == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

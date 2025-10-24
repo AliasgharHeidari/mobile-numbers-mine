@@ -17,15 +17,15 @@ func Start() {
 
 	app.Post("/user/login", handler.Login)
 	// User CRUD routes
-	app.Get("/user", middleware.JwtProtectedMiddleware, handler.GetUserList)
-	app.Get("/user/:id", middleware.JwtProtectedMiddleware, handler.GetUserByID)
-	app.Post("/user", middleware.JwtProtectedMiddleware, handler.CreateUser)
-	app.Put("/user/:id", middleware.JwtProtectedMiddleware, handler.UpdateUserByID)
-	app.Delete("/user/:id", middleware.JwtProtectedMiddleware, handler.DeleteUserByID)
+	app.Get("/user", middleware.ValidateToken, handler.GetUserList)
+	app.Get("/user/:id", middleware.ValidateToken, handler.GetUserByID)
+	app.Post("/user", middleware.ValidateToken, handler.CreateUser)
+	app.Put("/user/:id", middleware.ValidateToken, handler.UpdateUserByID)
+	app.Delete("/user/:id", middleware.ValidateToken, handler.DeleteUserByID)
 
 	// Mobile number routes
-	app.Post("/user/:id/mobile-number", middleware.JwtProtectedMiddleware, handler.AddMobileNumber)
-	app.Delete("/user/:id/mobile-number/:number", middleware.JwtProtectedMiddleware, handler.DeleteMobileNumber)
+	app.Post("/user/:id/mobile-number", middleware.ValidateToken, handler.AddMobileNumber)
+	app.Delete("/user/:id/mobile-number/:number", middleware.ValidateToken, handler.DeleteMobileNumber)
 
 	log.Println(app.Listen(config.AppConfig.API.Server.ListenString()))
 }
