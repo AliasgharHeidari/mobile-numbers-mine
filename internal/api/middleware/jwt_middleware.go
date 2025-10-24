@@ -35,13 +35,13 @@ func JwtProtectedMiddleware(c *fiber.Ctx) error {
 		})
 	}
 	
-	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		if exp, ok := claims["exp"].(float64); ok && time.Unix(int64(exp), 0).Before(time.Now()) {
+	if claims , ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-				"error": "token expired",
+				"error" : "token expired",
 			})
 		}
-		c.Locals("username" , claims["username"])
+		c.Locals("username", claims["username"])
 	}
 
 	return c.Next()
