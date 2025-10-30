@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"log"
-
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/handler"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/middleware"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/config"
