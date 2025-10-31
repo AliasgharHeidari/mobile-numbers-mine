@@ -2,10 +2,13 @@ package apiserver
 
 import (
 	"log"
+
+	_ "github.com/AliasgharHeidari/mobile-numbers-mine/docs"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/handler"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/middleware"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/config"
 	"github.com/gofiber/fiber/v2"
+	swagger "github.com/gofiber/swagger"
 )
 
 func Start() {
@@ -25,6 +28,9 @@ func Start() {
 	// Mobile number routes
 	app.Post("/user/:id/mobile-number", middleware.ValidateToken, handler.AddMobileNumber)
 	app.Delete("/user/:id/mobile-number/:number", middleware.ValidateToken, handler.DeleteMobileNumber)
+
+	// swagger
+	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	log.Println(app.Listen(config.AppConfig.API.Server.ListenString()))
 }

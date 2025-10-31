@@ -7,7 +7,17 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
-
+// Login godoc
+// @Summary Login
+// @Tags Auth
+// @Description Authenticate user and return JWT token
+// @Accept  json
+// @Produce  json
+// @Param   credentials  body  object  true  "Login credentials (email/password)"
+// @Success 200 {object} map[string]interface{} "token"
+// @Failure 400 {object} map[string]interface{} "bad request"
+// @Failure 401 {object} map[string]interface{} "unauthorized"
+// @Router /user/login [post]
 func Login(c *fiber.Ctx) error {
 	type request struct {
 		Username string `json:"username"`
