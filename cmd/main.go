@@ -3,7 +3,7 @@
 // @description API for managing users and their mobile numbers.
 // @contact.name Aliasghar Heidari
 // @contact.email ali.heidari@gmail.com
-// @host http://[host-ip]:[host-port]/swagger/index.html
+// @host http://127.0.0.1:9898/swagger/index.html
 // @BasePath /
 // @securityDefinitions.apikey BearerAuth
 // @in header
