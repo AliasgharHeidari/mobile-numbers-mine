@@ -10,7 +10,8 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Aliasghar"
+            "name": "Aliasghar Heidari",
+            "email": "ali.heidari@gmail.com"
         },
         "version": "{{.Version}}"
     },
@@ -70,20 +71,27 @@ const docTemplate = `{
                 "summary": "Create user",
                 "parameters": [
                     {
-                        "description": "user payload",
-                        "name": "user",
+                        "description": "new user payload",
+                        "name": "newUserDetails",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/model.CreateUserRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "created user",
+                        "description": "user created successfully",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/model.CreateUserSuccessResponse"
                         }
                     },
                     "400": {
@@ -421,8 +429,51 @@ const docTemplate = `{
             }
         }
     },
+    "definitions": {
+        "model.CreateUserRequest": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "description": "Age is the age of the user",
+                    "type": "integer",
+                    "example": 30
+                },
+                "familyName": {
+                    "description": "FamilyName is the last name of the user",
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "isMarried": {
+                    "description": "IsMarried indicates if the user is married",
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "description": "Name is the first name of the user",
+                    "type": "string",
+                    "example": "John"
+                }
+            }
+        },
+        "model.CreateUserSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "Message indicates the success message",
+                    "type": "string",
+                    "example": "User created successfully"
+                },
+                "user_id": {
+                    "description": "UserID is the ID of the created user",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        }
+    },
     "securityDefinitions": {
-        "ApiKeyAuth": {
+        "BearerAuth": {
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -433,10 +484,10 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:9898",
+	Host:             "http://[host-ip]:[host-port]/swagger/index.html",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Mobile Numbers Mine API",
+	Title:            "Mine API - Swagger Docs",
 	Description:      "API for managing users and their mobile numbers.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

@@ -1,10 +1,42 @@
 basePath: /
-host: localhost:9898
+definitions:
+  model.CreateUserRequest:
+    properties:
+      age:
+        description: Age is the age of the user
+        example: 30
+        type: integer
+      familyName:
+        description: FamilyName is the last name of the user
+        example: Doe
+        type: string
+      isMarried:
+        description: IsMarried indicates if the user is married
+        example: false
+        type: boolean
+      name:
+        description: Name is the first name of the user
+        example: John
+        type: string
+    type: object
+  model.CreateUserSuccessResponse:
+    properties:
+      message:
+        description: Message indicates the success message
+        example: User created successfully
+        type: string
+      user_id:
+        description: UserID is the ID of the created user
+        example: 1
+        type: integer
+    type: object
+host: http://[host-ip]:[host-port]/swagger/index.html
 info:
   contact:
-    name: Aliasghar
+    email: ali.heidari@gmail.com
+    name: Aliasghar Heidari
   description: API for managing users and their mobile numbers.
-  title: Mobile Numbers Mine API
+  title: Mine API - Swagger Docs
   version: "1.0"
 paths:
   /user:
@@ -34,19 +66,24 @@ paths:
       - application/json
       description: Create a new user
       parameters:
-      - description: user payload
+      - description: new user payload
         in: body
-        name: user
+        name: newUserDetails
         required: true
         schema:
-          type: object
+          $ref: '#/definitions/model.CreateUserRequest'
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "201":
-          description: created user
+          description: user created successfully
           schema:
-            type: object
+            $ref: '#/definitions/model.CreateUserSuccessResponse'
         "400":
           description: bad request
           schema:
@@ -271,7 +308,8 @@ paths:
       tags:
       - Auth
 securityDefinitions:
-  ApiKeyAuth:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
     in: header
     name: Authorization
     type: apiKey

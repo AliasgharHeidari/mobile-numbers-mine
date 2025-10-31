@@ -2,13 +2,14 @@
     "swagger": "2.0",
     "info": {
         "description": "API for managing users and their mobile numbers.",
-        "title": "Mobile Numbers Mine API",
+        "title": "Mine API - Swagger Docs",
         "contact": {
-            "name": "Aliasghar"
+            "name": "Aliasghar Heidari",
+            "email": "ali.heidari@gmail.com"
         },
         "version": "1.0"
     },
-    "host": "localhost:9898",
+    "host": "http://[host-ip]:[host-port]/swagger/index.html",
     "basePath": "/",
     "paths": {
         "/user": {
@@ -64,20 +65,27 @@
                 "summary": "Create user",
                 "parameters": [
                     {
-                        "description": "user payload",
-                        "name": "user",
+                        "description": "new user payload",
+                        "name": "newUserDetails",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/model.CreateUserRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "created user",
+                        "description": "user created successfully",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/model.CreateUserSuccessResponse"
                         }
                     },
                     "400": {
@@ -415,8 +423,51 @@
             }
         }
     },
+    "definitions": {
+        "model.CreateUserRequest": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "description": "Age is the age of the user",
+                    "type": "integer",
+                    "example": 30
+                },
+                "familyName": {
+                    "description": "FamilyName is the last name of the user",
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "isMarried": {
+                    "description": "IsMarried indicates if the user is married",
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "description": "Name is the first name of the user",
+                    "type": "string",
+                    "example": "John"
+                }
+            }
+        },
+        "model.CreateUserSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "Message indicates the success message",
+                    "type": "string",
+                    "example": "User created successfully"
+                },
+                "user_id": {
+                    "description": "UserID is the ID of the created user",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        }
+    },
     "securityDefinitions": {
-        "ApiKeyAuth": {
+        "BearerAuth": {
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
