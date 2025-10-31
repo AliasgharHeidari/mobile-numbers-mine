@@ -30,7 +30,7 @@ definitions:
         example: 1
         type: integer
     type: object
-host: http://[host-ip]:[host-port]/swagger/index.html
+host: http://127.0.0.1:9898/swagger/index.html
 info:
   contact:
     email: ali.heidari@gmail.com

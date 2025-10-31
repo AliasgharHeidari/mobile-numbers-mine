@@ -9,7 +9,7 @@
         },
         "version": "1.0"
     },
-    "host": "http://[host-ip]:[host-port]/swagger/index.html",
+    "host": "http://127.0.0.1:9898/swagger/index.html",
     "basePath": "/",
     "paths": {
         "/user": {
