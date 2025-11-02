@@ -1,5 +1,28 @@
 basePath: /
 definitions:
+  model.AddMobileNumberFailureResponse:
+    properties:
+      error:
+        example: Failed to add mobile number
+        type: string
+    type: object
+  model.AddMobileNumberRequest:
+    properties:
+      mobileNumber:
+        $ref: '#/definitions/model.MobileNumber'
+    type: object
+  model.AddMobileNumberSuccessResponse:
+    properties:
+      mobileNumber:
+        $ref: '#/definitions/model.MobileNumber'
+    type: object
+  model.CreateUserFailureResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Failed to create user
+        type: string
+    type: object
   model.CreateUserRequest:
     properties:
       age:
@@ -30,7 +53,153 @@ definitions:
         example: 1
         type: integer
     type: object
-host: http://127.0.0.1:9898/swagger/index.html
+  model.DeleteMobileNumberSuccessResponse:
+    properties:
+      message:
+        example: Mobile number deleted successfully
+        type: string
+    type: object
+  model.DeleteUserByIDSuccessResponse:
+    properties:
+      message:
+        description: Message indicates the success message
+        example: User deleted successfully
+        type: string
+    type: object
+  model.GetUserByIDSuccessResponse:
+    properties:
+      user:
+        allOf:
+        - $ref: '#/definitions/model.User'
+        description: User is the user object
+    type: object
+  model.GetUserListFailureResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Failed to retrieve user list
+        type: string
+    type: object
+  model.GetUserListSuccessResponse:
+    properties:
+      users:
+        description: Users is a list of users
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+    type: object
+  model.LoginFailureResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Authentication failed
+        type: string
+    type: object
+  model.LoginRequest:
+    properties:
+      password:
+        description: Password is the password of the user
+        example: "1234"
+        type: string
+      username:
+        description: Username is the username of the user
+        example: Aliasghar
+        type: string
+    type: object
+  model.LoginSuccessResponse:
+    properties:
+      token:
+        description: Token is the JWT token
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        type: string
+    type: object
+  model.MobileNumber:
+    properties:
+      countryCode:
+        description: CountryCode is the country code associated with the mobile number
+        type: string
+      isActive:
+        description: IsActive indicates if the mobile number is active
+        type: boolean
+      number:
+        description: Number is the mobile number
+        type: string
+      type:
+        description: Type indicates the type of mobile number (e.g., credit, debit)
+        type: string
+    type: object
+  model.StatusNotFoundResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: User not found
+        type: string
+    type: object
+  model.StatusUnauthorizedResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Authentication failed
+        type: string
+    type: object
+  model.UpdateUserByIDFailureResponse:
+    properties:
+      error:
+        description: Error indicates the error message
+        example: Failed to update user
+        type: string
+    type: object
+  model.UpdateUserByIDRequest:
+    properties:
+      age:
+        description: Age is the age of the user
+        example: 21
+        type: integer
+      familyName:
+        description: FamilyName is the last name of the user
+        example: Nigga
+        type: string
+      isMarried:
+        description: IsMarried indicates if the user is married
+        example: true
+        type: boolean
+      name:
+        description: Name is the first name of the user
+        example: Amir
+        type: string
+    type: object
+  model.UpdateUserByIDSuccessResponse:
+    properties:
+      message:
+        description: Message indicates the success message
+        example: User updated successfully
+        type: string
+    type: object
+  model.User:
+    properties:
+      age:
+        description: Age is the age of the user
+        type: integer
+      familyName:
+        description: FamilyName is the last name of the user
+        type: string
+      id:
+        description: ID is the unique identifier for the user
+        type: integer
+      isMarried:
+        description: IsMarried indicates if the user is married
+        type: boolean
+      mobileNumbers:
+        description: MobileNumbers is a list of mobile numbers associated with the
+          user
+        items:
+          $ref: '#/definitions/model.MobileNumber'
+        type: array
+      name:
+        description: Name is the first name of the user
+        type: string
+    type: object
+host: 127.0.0.1:9898
 info:
   contact:
     email: ali.heidari@gmail.com
@@ -46,18 +215,15 @@ paths:
       - application/json
       responses:
         "200":
-          description: users
+          description: OK
           schema:
-            items:
-              type: object
-            type: array
+            $ref: '#/definitions/model.GetUserListSuccessResponse'
         "401":
-          description: unauthorized
+          description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.GetUserListFailureResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: List users
       tags:
       - Users
@@ -72,11 +238,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.CreateUserRequest'
-      - description: Bearer {token}
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -85,17 +246,15 @@ paths:
           schema:
             $ref: '#/definitions/model.CreateUserSuccessResponse'
         "400":
-          description: bad request
+          description: invalid request body
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.CreateUserFailureResponse'
         "401":
           description: unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Create user
       tags:
       - Users
@@ -110,21 +269,19 @@ paths:
         type: string
       responses:
         "204":
-          description: no content
+          description: user deleted successfully
           schema:
-            type: string
+            $ref: '#/definitions/model.DeleteUserByIDSuccessResponse'
         "401":
           description: unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
         "404":
           description: not found
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusNotFoundResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Delete user
       tags:
       - Users
@@ -140,21 +297,19 @@ paths:
       - application/json
       responses:
         "200":
-          description: user
+          description: user retrieved successfully
           schema:
-            type: object
+            $ref: '#/definitions/model.GetUserByIDSuccessResponse'
         "401":
           description: unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
         "404":
           description: not found
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusNotFoundResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get user by ID
       tags:
       - Users
@@ -173,31 +328,28 @@ paths:
         name: user
         required: true
         schema:
-          type: object
+          $ref: '#/definitions/model.UpdateUserByIDRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: updated user
+          description: user updated successfully
           schema:
-            type: object
+            $ref: '#/definitions/model.UpdateUserByIDSuccessResponse'
         "400":
           description: bad request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.UpdateUserByIDFailureResponse'
         "401":
           description: unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
         "404":
           description: not found
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusNotFoundResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Update user
       tags:
       - Users
@@ -217,26 +369,24 @@ paths:
         name: number
         required: true
         schema:
-          type: object
+          $ref: '#/definitions/model.AddMobileNumberRequest'
       produces:
       - application/json
       responses:
         "201":
-          description: added number
+          description: mobile number added successfully
           schema:
-            type: object
+            $ref: '#/definitions/model.AddMobileNumberSuccessResponse'
         "400":
           description: bad request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.AddMobileNumberFailureResponse'
         "401":
           description: unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Add mobile number
       tags:
       - MobileNumbers
@@ -256,21 +406,19 @@ paths:
         type: string
       responses:
         "204":
-          description: no content
+          description: mobile number deleted successfully
           schema:
-            type: string
+            $ref: '#/definitions/model.DeleteMobileNumberSuccessResponse'
         "401":
           description: unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusUnauthorizedResponse'
         "404":
           description: not found
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.StatusNotFoundResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Delete mobile number
       tags:
       - MobileNumbers
@@ -280,33 +428,30 @@ paths:
       - application/json
       description: Authenticate user and return JWT token
       parameters:
-      - description: Login credentials (email/password)
+      - description: login request
         in: body
-        name: credentials
+        name: request
         required: true
         schema:
-          type: object
+          $ref: '#/definitions/model.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: token
+          description: login success
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/model.LoginSuccessResponse'
         "400":
-          description: bad request
+          description: invalid request body
           schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: unauthorized
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Login
+            $ref: '#/definitions/model.LoginFailureResponse'
+      summary: Login user
       tags:
-      - Auth
+      - Authentication
+schemes:
+- http
+security:
+- BearerAuth: []
 securityDefinitions:
   BearerAuth:
     description: Type "Bearer" followed by a space and JWT token.
