@@ -5,16 +5,3 @@ api:
   jwt:
     secret_key: "some_secure_and_random_key"
     expiration_minutes: 60
-  cors:
-    allowed_origins:
-      - "http://localhost:3000"
-      - "https://yourdomain.com"
-    allowed_methods:
-      - "GET"
-      - "POST"
-      - "PUT"
-      - "DELETE"
-    allowed_headers:
-      - "Content-Type"
-      - "Authorization"
-    allow_credentials: true
