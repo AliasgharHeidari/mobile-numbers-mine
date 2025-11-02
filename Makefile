@@ -1,4 +1,3 @@
-go_bin_dir = "/Users/ashva/Documents/go_projects/bin/"
 
 build-linux-amd64:
 	GOOS=linux GOARCH=amd64 go build -o bin/mobile-numbers-mine-linux-amd64 cmd/main.go
@@ -19,7 +18,7 @@ run:
 	go run cmd/main.go
 
 doc:
-	${go_bin_dir}swag init -g cmd/main.go -o docs/api	
+	swag init -g cmd/main.go -o docs/api	
 
 build-all: build-linux-amd64 build-darwin-amd64 build-windows-amd64
 
