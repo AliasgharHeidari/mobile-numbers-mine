@@ -13,9 +13,9 @@ init-run:
 	@echo "Starting the server..."
 	go run cmd/main.go
 
-run: 
+run:
 	@echo "Starting the server..."
-	go run cmd/main.go
+	REDIS_ADDR=localhost:6379 REDIS_DB=0 REDIS_PASS= go run cmd/main.go
 
 doc:
 	swag init -g cmd/main.go -o docs/api	

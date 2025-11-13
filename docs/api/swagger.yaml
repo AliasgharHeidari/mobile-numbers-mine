@@ -1,211 +1,10 @@
 basePath: /
-definitions:
-  model.AddMobileNumberFailureResponse:
-    properties:
-      error:
-        example: Failed to add mobile number
-        type: string
-    type: object
-  model.AddMobileNumberRequest:
-    properties:
-      mobileNumber:
-        $ref: '#/definitions/model.MobileNumber'
-    type: object
-  model.AddMobileNumberSuccessResponse:
-    properties:
-      mobileNumber:
-        $ref: '#/definitions/model.MobileNumber'
-    type: object
-  model.CreateUserFailureResponse:
-    properties:
-      error:
-        description: Error indicates the error message
-        example: Failed to create user
-        type: string
-    type: object
-  model.CreateUserRequest:
-    properties:
-      age:
-        description: Age is the age of the user
-        example: 30
-        type: integer
-      familyName:
-        description: FamilyName is the last name of the user
-        example: Doe
-        type: string
-      isMarried:
-        description: IsMarried indicates if the user is married
-        example: false
-        type: boolean
-      name:
-        description: Name is the first name of the user
-        example: John
-        type: string
-    type: object
-  model.CreateUserSuccessResponse:
-    properties:
-      message:
-        description: Message indicates the success message
-        example: User created successfully
-        type: string
-      user_id:
-        description: UserID is the ID of the created user
-        example: 1
-        type: integer
-    type: object
-  model.DeleteMobileNumberSuccessResponse:
-    properties:
-      message:
-        example: Mobile number deleted successfully
-        type: string
-    type: object
-  model.DeleteUserByIDSuccessResponse:
-    properties:
-      message:
-        description: Message indicates the success message
-        example: User deleted successfully
-        type: string
-    type: object
-  model.GetUserByIDSuccessResponse:
-    properties:
-      user:
-        allOf:
-        - $ref: '#/definitions/model.User'
-        description: User is the user object
-    type: object
-  model.GetUserListFailureResponse:
-    properties:
-      error:
-        description: Error indicates the error message
-        example: Failed to retrieve user list
-        type: string
-    type: object
-  model.GetUserListSuccessResponse:
-    properties:
-      users:
-        description: Users is a list of users
-        items:
-          $ref: '#/definitions/model.User'
-        type: array
-    type: object
-  model.LoginFailureResponse:
-    properties:
-      error:
-        description: Error indicates the error message
-        example: Authentication failed
-        type: string
-    type: object
-  model.LoginRequest:
-    properties:
-      password:
-        description: Password is the password of the user
-        example: "1234"
-        type: string
-      username:
-        description: Username is the username of the user
-        example: Aliasghar
-        type: string
-    type: object
-  model.LoginSuccessResponse:
-    properties:
-      token:
-        description: Token is the JWT token
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-        type: string
-    type: object
-  model.MobileNumber:
-    properties:
-      countryCode:
-        description: CountryCode is the country code associated with the mobile number
-        type: string
-      isActive:
-        description: IsActive indicates if the mobile number is active
-        type: boolean
-      number:
-        description: Number is the mobile number
-        type: string
-      type:
-        description: Type indicates the type of mobile number (e.g., credit, debit)
-        type: string
-    type: object
-  model.StatusNotFoundResponse:
-    properties:
-      error:
-        description: Error indicates the error message
-        example: User not found
-        type: string
-    type: object
-  model.StatusUnauthorizedResponse:
-    properties:
-      error:
-        description: Error indicates the error message
-        example: Authentication failed
-        type: string
-    type: object
-  model.UpdateUserByIDFailureResponse:
-    properties:
-      error:
-        description: Error indicates the error message
-        example: Failed to update user
-        type: string
-    type: object
-  model.UpdateUserByIDRequest:
-    properties:
-      age:
-        description: Age is the age of the user
-        example: 21
-        type: integer
-      familyName:
-        description: FamilyName is the last name of the user
-        example: Nigga
-        type: string
-      isMarried:
-        description: IsMarried indicates if the user is married
-        example: true
-        type: boolean
-      name:
-        description: Name is the first name of the user
-        example: Amir
-        type: string
-    type: object
-  model.UpdateUserByIDSuccessResponse:
-    properties:
-      message:
-        description: Message indicates the success message
-        example: User updated successfully
-        type: string
-    type: object
-  model.User:
-    properties:
-      age:
-        description: Age is the age of the user
-        type: integer
-      familyName:
-        description: FamilyName is the last name of the user
-        type: string
-      id:
-        description: ID is the unique identifier for the user
-        type: integer
-      isMarried:
-        description: IsMarried indicates if the user is married
-        type: boolean
-      mobileNumbers:
-        description: MobileNumbers is a list of mobile numbers associated with the
-          user
-        items:
-          $ref: '#/definitions/model.MobileNumber'
-        type: array
-      name:
-        description: Name is the first name of the user
-        type: string
-    type: object
-host: 127.0.0.1:9898
+host: localhost:9898
 info:
   contact:
-    email: ali.heidari@gmail.com
-    name: Aliasghar Heidari
+    name: Aliasghar
   description: API for managing users and their mobile numbers.
-  title: Mine API - Swagger Docs
+  title: Mobile Numbers Mine API
   version: "1.0"
 paths:
   /user:
@@ -215,15 +14,18 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: users
           schema:
-            $ref: '#/definitions/model.GetUserListSuccessResponse'
+            items:
+              type: object
+            type: array
         "401":
-          description: Unauthorized
+          description: unauthorized
           schema:
-            $ref: '#/definitions/model.GetUserListFailureResponse'
+            additionalProperties: true
+            type: object
       security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
       summary: List users
       tags:
       - Users
@@ -232,29 +34,31 @@ paths:
       - application/json
       description: Create a new user
       parameters:
-      - description: new user payload
+      - description: user payload
         in: body
-        name: newUserDetails
+        name: user
         required: true
         schema:
-          $ref: '#/definitions/model.CreateUserRequest'
+          type: object
       produces:
       - application/json
       responses:
         "201":
-          description: user created successfully
+          description: created user
           schema:
-            $ref: '#/definitions/model.CreateUserSuccessResponse'
+            type: object
         "400":
-          description: invalid request body
+          description: bad request
           schema:
-            $ref: '#/definitions/model.CreateUserFailureResponse'
+            additionalProperties: true
+            type: object
         "401":
           description: unauthorized
           schema:
-            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+            additionalProperties: true
+            type: object
       security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
       summary: Create user
       tags:
       - Users
@@ -269,19 +73,21 @@ paths:
         type: string
       responses:
         "204":
-          description: user deleted successfully
+          description: no content
           schema:
-            $ref: '#/definitions/model.DeleteUserByIDSuccessResponse'
+            type: string
         "401":
           description: unauthorized
           schema:
-            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+            additionalProperties: true
+            type: object
         "404":
           description: not found
           schema:
-            $ref: '#/definitions/model.StatusNotFoundResponse'
+            additionalProperties: true
+            type: object
       security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
       summary: Delete user
       tags:
       - Users
@@ -297,19 +103,21 @@ paths:
       - application/json
       responses:
         "200":
-          description: user retrieved successfully
+          description: user
           schema:
-            $ref: '#/definitions/model.GetUserByIDSuccessResponse'
+            type: object
         "401":
           description: unauthorized
           schema:
-            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+            additionalProperties: true
+            type: object
         "404":
           description: not found
           schema:
-            $ref: '#/definitions/model.StatusNotFoundResponse'
+            additionalProperties: true
+            type: object
       security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
       summary: Get user by ID
       tags:
       - Users
@@ -328,28 +136,31 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/model.UpdateUserByIDRequest'
+          type: object
       produces:
       - application/json
       responses:
         "200":
-          description: user updated successfully
+          description: updated user
           schema:
-            $ref: '#/definitions/model.UpdateUserByIDSuccessResponse'
+            type: object
         "400":
           description: bad request
           schema:
-            $ref: '#/definitions/model.UpdateUserByIDFailureResponse'
+            additionalProperties: true
+            type: object
         "401":
           description: unauthorized
           schema:
-            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+            additionalProperties: true
+            type: object
         "404":
           description: not found
           schema:
-            $ref: '#/definitions/model.StatusNotFoundResponse'
+            additionalProperties: true
+            type: object
       security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
       summary: Update user
       tags:
       - Users
@@ -369,24 +180,26 @@ paths:
         name: number
         required: true
         schema:
-          $ref: '#/definitions/model.AddMobileNumberRequest'
+          type: object
       produces:
       - application/json
       responses:
         "201":
-          description: mobile number added successfully
+          description: added number
           schema:
-            $ref: '#/definitions/model.AddMobileNumberSuccessResponse'
+            type: object
         "400":
           description: bad request
           schema:
-            $ref: '#/definitions/model.AddMobileNumberFailureResponse'
+            additionalProperties: true
+            type: object
         "401":
           description: unauthorized
           schema:
-            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+            additionalProperties: true
+            type: object
       security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
       summary: Add mobile number
       tags:
       - MobileNumbers
@@ -406,19 +219,21 @@ paths:
         type: string
       responses:
         "204":
-          description: mobile number deleted successfully
+          description: no content
           schema:
-            $ref: '#/definitions/model.DeleteMobileNumberSuccessResponse'
+            type: string
         "401":
           description: unauthorized
           schema:
-            $ref: '#/definitions/model.StatusUnauthorizedResponse'
+            additionalProperties: true
+            type: object
         "404":
           description: not found
           schema:
-            $ref: '#/definitions/model.StatusNotFoundResponse'
+            additionalProperties: true
+            type: object
       security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
       summary: Delete mobile number
       tags:
       - MobileNumbers
@@ -428,33 +243,35 @@ paths:
       - application/json
       description: Authenticate user and return JWT token
       parameters:
-      - description: login request
+      - description: Login credentials (email/password)
         in: body
-        name: request
+        name: credentials
         required: true
         schema:
-          $ref: '#/definitions/model.LoginRequest'
+          type: object
       produces:
       - application/json
       responses:
         "200":
-          description: login success
+          description: token
           schema:
-            $ref: '#/definitions/model.LoginSuccessResponse'
+            additionalProperties: true
+            type: object
         "400":
-          description: invalid request body
+          description: bad request
           schema:
-            $ref: '#/definitions/model.LoginFailureResponse'
-      summary: Login user
+            additionalProperties: true
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login
       tags:
-      - Authentication
-schemes:
-- http
-security:
-- BearerAuth: []
+      - Auth
 securityDefinitions:
-  BearerAuth:
-    description: Type "Bearer" followed by a space and JWT token.
+  ApiKeyAuth:
     in: header
     name: Authorization
     type: apiKey

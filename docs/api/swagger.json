@@ -1,25 +1,21 @@
 {
-    "schemes": [
-        "http"
-    ],
     "swagger": "2.0",
     "info": {
         "description": "API for managing users and their mobile numbers.",
-        "title": "Mine API - Swagger Docs",
+        "title": "Mobile Numbers Mine API",
         "contact": {
-            "name": "Aliasghar Heidari",
-            "email": "ali.heidari@gmail.com"
+            "name": "Aliasghar"
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1:9898",
+    "host": "localhost:9898",
     "basePath": "/",
     "paths": {
         "/user": {
             "get": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Get list of users",
@@ -32,15 +28,19 @@
                 "summary": "List users",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "users",
                         "schema": {
-                            "$ref": "#/definitions/model.GetUserListSuccessResponse"
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.GetUserListFailureResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -48,7 +48,7 @@
             "post": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Create a new user",
@@ -64,32 +64,34 @@
                 "summary": "Create user",
                 "parameters": [
                     {
-                        "description": "new user payload",
-                        "name": "newUserDetails",
+                        "description": "user payload",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.CreateUserRequest"
+                            "type": "object"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "user created successfully",
+                        "description": "created user",
                         "schema": {
-                            "$ref": "#/definitions/model.CreateUserSuccessResponse"
+                            "type": "object"
                         }
                     },
                     "400": {
-                        "description": "invalid request body",
+                        "description": "bad request",
                         "schema": {
-                            "$ref": "#/definitions/model.CreateUserFailureResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "401": {
                         "description": "unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusUnauthorizedResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -105,31 +107,40 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Authentication"
+                    "Auth"
                 ],
-                "summary": "Login user",
+                "summary": "Login",
                 "parameters": [
                     {
-                        "description": "login request",
-                        "name": "request",
+                        "description": "Login credentials (email/password)",
+                        "name": "credentials",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.LoginRequest"
+                            "type": "object"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "login success",
+                        "description": "token",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginSuccessResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "400": {
-                        "description": "invalid request body",
+                        "description": "bad request",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginFailureResponse"
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -139,7 +150,7 @@
             "get": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Get user by ID",
@@ -161,21 +172,23 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "user retrieved successfully",
+                        "description": "user",
                         "schema": {
-                            "$ref": "#/definitions/model.GetUserByIDSuccessResponse"
+                            "type": "object"
                         }
                     },
                     "401": {
                         "description": "unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusUnauthorizedResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "404": {
                         "description": "not found",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusNotFoundResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -183,7 +196,7 @@
             "put": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Update user by ID",
@@ -211,33 +224,36 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UpdateUserByIDRequest"
+                            "type": "object"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "user updated successfully",
+                        "description": "updated user",
                         "schema": {
-                            "$ref": "#/definitions/model.UpdateUserByIDSuccessResponse"
+                            "type": "object"
                         }
                     },
                     "400": {
                         "description": "bad request",
                         "schema": {
-                            "$ref": "#/definitions/model.UpdateUserByIDFailureResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "401": {
                         "description": "unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusUnauthorizedResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "404": {
                         "description": "not found",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusNotFoundResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -245,7 +261,7 @@
             "delete": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete user by ID",
@@ -264,21 +280,23 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "user deleted successfully",
+                        "description": "no content",
                         "schema": {
-                            "$ref": "#/definitions/model.DeleteUserByIDSuccessResponse"
+                            "type": "string"
                         }
                     },
                     "401": {
                         "description": "unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusUnauthorizedResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "404": {
                         "description": "not found",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusNotFoundResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -288,7 +306,7 @@
             "post": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Add a mobile number to user",
@@ -316,27 +334,29 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.AddMobileNumberRequest"
+                            "type": "object"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "mobile number added successfully",
+                        "description": "added number",
                         "schema": {
-                            "$ref": "#/definitions/model.AddMobileNumberSuccessResponse"
+                            "type": "object"
                         }
                     },
                     "400": {
                         "description": "bad request",
                         "schema": {
-                            "$ref": "#/definitions/model.AddMobileNumberFailureResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "401": {
                         "description": "unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusUnauthorizedResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -346,7 +366,7 @@
             "delete": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ],
                 "description": "Delete a mobile number of a user",
@@ -372,322 +392,34 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "mobile number deleted successfully",
+                        "description": "no content",
                         "schema": {
-                            "$ref": "#/definitions/model.DeleteMobileNumberSuccessResponse"
+                            "type": "string"
                         }
                     },
                     "401": {
                         "description": "unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusUnauthorizedResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "404": {
                         "description": "not found",
                         "schema": {
-                            "$ref": "#/definitions/model.StatusNotFoundResponse"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "model.AddMobileNumberFailureResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string",
-                    "example": "Failed to add mobile number"
-                }
-            }
-        },
-        "model.AddMobileNumberRequest": {
-            "type": "object",
-            "properties": {
-                "mobileNumber": {
-                    "$ref": "#/definitions/model.MobileNumber"
-                }
-            }
-        },
-        "model.AddMobileNumberSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "mobileNumber": {
-                    "$ref": "#/definitions/model.MobileNumber"
-                }
-            }
-        },
-        "model.CreateUserFailureResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "description": "Error indicates the error message",
-                    "type": "string",
-                    "example": "Failed to create user"
-                }
-            }
-        },
-        "model.CreateUserRequest": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "description": "Age is the age of the user",
-                    "type": "integer",
-                    "example": 30
-                },
-                "familyName": {
-                    "description": "FamilyName is the last name of the user",
-                    "type": "string",
-                    "example": "Doe"
-                },
-                "isMarried": {
-                    "description": "IsMarried indicates if the user is married",
-                    "type": "boolean",
-                    "example": false
-                },
-                "name": {
-                    "description": "Name is the first name of the user",
-                    "type": "string",
-                    "example": "John"
-                }
-            }
-        },
-        "model.CreateUserSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "description": "Message indicates the success message",
-                    "type": "string",
-                    "example": "User created successfully"
-                },
-                "user_id": {
-                    "description": "UserID is the ID of the created user",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
-        "model.DeleteMobileNumberSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Mobile number deleted successfully"
-                }
-            }
-        },
-        "model.DeleteUserByIDSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "description": "Message indicates the success message",
-                    "type": "string",
-                    "example": "User deleted successfully"
-                }
-            }
-        },
-        "model.GetUserByIDSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "description": "User is the user object",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.User"
-                        }
-                    ]
-                }
-            }
-        },
-        "model.GetUserListFailureResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "description": "Error indicates the error message",
-                    "type": "string",
-                    "example": "Failed to retrieve user list"
-                }
-            }
-        },
-        "model.GetUserListSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "users": {
-                    "description": "Users is a list of users",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.User"
-                    }
-                }
-            }
-        },
-        "model.LoginFailureResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "description": "Error indicates the error message",
-                    "type": "string",
-                    "example": "Authentication failed"
-                }
-            }
-        },
-        "model.LoginRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "description": "Password is the password of the user",
-                    "type": "string",
-                    "example": "1234"
-                },
-                "username": {
-                    "description": "Username is the username of the user",
-                    "type": "string",
-                    "example": "Aliasghar"
-                }
-            }
-        },
-        "model.LoginSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "description": "Token is the JWT token",
-                    "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-                }
-            }
-        },
-        "model.MobileNumber": {
-            "type": "object",
-            "properties": {
-                "countryCode": {
-                    "description": "CountryCode is the country code associated with the mobile number",
-                    "type": "string"
-                },
-                "isActive": {
-                    "description": "IsActive indicates if the mobile number is active",
-                    "type": "boolean"
-                },
-                "number": {
-                    "description": "Number is the mobile number",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "Type indicates the type of mobile number (e.g., credit, debit)",
-                    "type": "string"
-                }
-            }
-        },
-        "model.StatusNotFoundResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "description": "Error indicates the error message",
-                    "type": "string",
-                    "example": "User not found"
-                }
-            }
-        },
-        "model.StatusUnauthorizedResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "description": "Error indicates the error message",
-                    "type": "string",
-                    "example": "Authentication failed"
-                }
-            }
-        },
-        "model.UpdateUserByIDFailureResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "description": "Error indicates the error message",
-                    "type": "string",
-                    "example": "Failed to update user"
-                }
-            }
-        },
-        "model.UpdateUserByIDRequest": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "description": "Age is the age of the user",
-                    "type": "integer",
-                    "example": 21
-                },
-                "familyName": {
-                    "description": "FamilyName is the last name of the user",
-                    "type": "string",
-                    "example": "Nigga"
-                },
-                "isMarried": {
-                    "description": "IsMarried indicates if the user is married",
-                    "type": "boolean",
-                    "example": true
-                },
-                "name": {
-                    "description": "Name is the first name of the user",
-                    "type": "string",
-                    "example": "Amir"
-                }
-            }
-        },
-        "model.UpdateUserByIDSuccessResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "description": "Message indicates the success message",
-                    "type": "string",
-                    "example": "User updated successfully"
-                }
-            }
-        },
-        "model.User": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "description": "Age is the age of the user",
-                    "type": "integer"
-                },
-                "familyName": {
-                    "description": "FamilyName is the last name of the user",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "ID is the unique identifier for the user",
-                    "type": "integer"
-                },
-                "isMarried": {
-                    "description": "IsMarried indicates if the user is married",
-                    "type": "boolean"
-                },
-                "mobileNumbers": {
-                    "description": "MobileNumbers is a list of mobile numbers associated with the user",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.MobileNumber"
-                    }
-                },
-                "name": {
-                    "description": "Name is the first name of the user",
-                    "type": "string"
                 }
             }
         }
     },
     "securityDefinitions": {
-        "BearerAuth": {
-            "description": "Type \"Bearer\" followed by a space and JWT token.",
+        "ApiKeyAuth": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
         }
-    },
-    "security": [
-        {
-            "BearerAuth": []
-        }
-    ]
+    }
 }
