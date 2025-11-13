@@ -1,0 +1,278 @@
+basePath: /
+host: localhost:9898
+info:
+  contact:
+    name: Aliasghar
+  description: API for managing users and their mobile numbers.
+  title: Mobile Numbers Mine API
+  version: "1.0"
+paths:
+  /user:
+    get:
+      description: Get list of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: users
+          schema:
+            items:
+              type: object
+            type: array
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: user payload
+        in: body
+        name: user
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: created user
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create user
+      tags:
+      - Users
+  /user/{id}:
+    delete:
+      description: Delete user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: no content
+          schema:
+            type: string
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: not found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user
+      tags:
+      - Users
+    get:
+      description: Get user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user
+          schema:
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: not found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get user by ID
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: user payload
+        in: body
+        name: user
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: updated user
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: not found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update user
+      tags:
+      - Users
+  /user/{id}/mobile-number:
+    post:
+      consumes:
+      - application/json
+      description: Add a mobile number to user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: mobile number payload
+        in: body
+        name: number
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: added number
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Add mobile number
+      tags:
+      - MobileNumbers
+  /user/{id}/mobile-number/{number}:
+    delete:
+      description: Delete a mobile number of a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: mobile number
+        in: path
+        name: number
+        required: true
+        type: string
+      responses:
+        "204":
+          description: no content
+          schema:
+            type: string
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: not found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete mobile number
+      tags:
+      - MobileNumbers
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: Login credentials (email/password)
+        in: body
+        name: credentials
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
