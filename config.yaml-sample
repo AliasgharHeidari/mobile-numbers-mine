@@ -5,3 +5,7 @@ api:
   jwt:
     secret_key: "some_secure_and_random_key"
     expiration_minutes: 60
+redis:
+  address: ""
+  password: ""
+  db: 0
