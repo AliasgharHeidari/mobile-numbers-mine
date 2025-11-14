@@ -9,3 +9,4 @@ redis:
   address: ""
   password: ""
   db: 0
+  timeout: 5
