@@ -22,10 +22,12 @@ import (
 	apiserver "github.com/AliasgharHeidari/mobile-numbers-mine/internal/api/server"
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/config"
 	onmemory "github.com/AliasgharHeidari/mobile-numbers-mine/internal/repository/on-memory"
+	dataonredis "github.com/AliasgharHeidari/mobile-numbers-mine/internal/repository/redis"
 )
 
 func main() {
 	config.InitConfig()
-	onmemory.LoadInitUsers()
+	dataonredis.InitRedisClient()
+	onmemory.InitUsers()
 	apiserver.Start()
 }
