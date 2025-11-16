@@ -2,85 +2,95 @@ package service
 
 import (
 	"errors"
+	"math/rand/v2"
 
 	"github.com/AliasgharHeidari/mobile-numbers-mine/internal/model"
-	onmemory "github.com/AliasgharHeidari/mobile-numbers-mine/internal/repository/on-memory"
+	dataonredis "github.com/AliasgharHeidari/mobile-numbers-mine/internal/repository/redis"
 )
 
 func GetUserList() ([]model.User, error) {
-	users := onmemory.UsersRepo.Users
-	return users, nil
+	return dataonredis.GetAllUsersFromRedis()
 }
 
 func GetUserByID(id int) (model.User, error) {
-	for _, user := range onmemory.UsersRepo.Users {
-		if user.ID == id {
-			return user, nil
-		}
+	user, err := dataonredis.LoadUserFromRedis(id)
+	if err != nil {
+		return model.User{}, err
 	}
-
-	errorMessage := errors.New("user not found")
-	return model.User{}, errorMessage
+	if user == nil {
+		return model.User{}, errors.New("user not found")
+	}
+	return *user, nil
 }
 
 func CreateUser(user model.User) (int, error) {
-	onmemory.UsersRepo.UserChangeMutex.Lock()
-	defer onmemory.UsersRepo.UserChangeMutex.Unlock()
+	// generate randon int as id
+	user.ID = rand.IntN(10000000)
 
-	newRandomId := len(onmemory.UsersRepo.Users) + 1
-	user.ID = newRandomId
-	onmemory.UsersRepo.Users = append(onmemory.UsersRepo.Users, user)
-
-	return newRandomId, nil
-}
-func UpdateUserByID(id int, updatedUser model.User) error {
-	onmemory.UsersRepo.UserChangeMutex.Lock()
-	defer onmemory.UsersRepo.UserChangeMutex.Unlock()
-
-	for i, user := range onmemory.UsersRepo.Users {
-		if user.ID == id {
-			updatedUser.ID = id
-			onmemory.UsersRepo.Users[i] = updatedUser
-			return nil
-		}
+	err := dataonredis.SaveUserToRedis(user)
+	if err != nil {
+		return 0, err
 	}
 
-	return errors.New("user not found")
+	return user.ID, nil
+}
+
+func UpdateUserByID(id int, updatedUser model.User) error {
+	updatedUser.ID = id
+
+	err := dataonredis.SaveUserToRedis(updatedUser)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func DeleteUserByID(id int) error {
-	for i, user := range onmemory.UsersRepo.Users {
-		if user.ID == id {
-			onmemory.UsersRepo.Users = append(onmemory.UsersRepo.Users[:i], onmemory.UsersRepo.Users[i+1:]...)
-			return nil
-		}
+	err := dataonredis.DeleteUserFromRedis(id)
+	if err != nil {
+		return err
 	}
 
-	return errors.New("user not found")
+	return nil
 }
 
 func AddMobileNumber(id int, mobileNumbers model.MobileNumber) error {
-	for i, user := range onmemory.UsersRepo.Users {
-		if user.ID == id {
-			onmemory.UsersRepo.Users[i].MobileNumbers = append(onmemory.UsersRepo.Users[i].MobileNumbers, mobileNumbers)
-			return nil
+	loadedUser, err := dataonredis.LoadUserFromRedis(id)
+	if err != nil {
+		return err
+	}
+	if loadedUser != nil {
+		loadedUser.MobileNumbers = append(loadedUser.MobileNumbers, mobileNumbers)
+		err = dataonredis.SaveUserToRedis(*loadedUser)
+		if err != nil {
+			return err
 		}
+		return nil
 	}
 
 	return errors.New("user not found")
 }
 
 func DeleteMobileNumber(id int, Number string) error {
-	for i, user := range onmemory.UsersRepo.Users {
-		if user.ID == id {
-			for j, mobile := range user.MobileNumbers {
-				if mobile.Number == Number {
-					onmemory.UsersRepo.Users[i].MobileNumbers = append(user.MobileNumbers[:j], user.MobileNumbers[j+1:]...)
-					return nil
-				}
-			}
-			return errors.New("MobileNumber not found")
-		}
+	loadedUser, err := dataonredis.LoadUserFromRedis(id)
+	if err != nil {
+		return err
 	}
-	return errors.New("error : user not found")
+	if loadedUser != nil {
+		var updatedMobileNumbers []model.MobileNumber
+		for _, mobileNumber := range loadedUser.MobileNumbers {
+			if mobileNumber.Number != Number {
+				updatedMobileNumbers = append(updatedMobileNumbers, mobileNumber)
+			}
+		}
+		loadedUser.MobileNumbers = updatedMobileNumbers
+		err = dataonredis.SaveUserToRedis(*loadedUser)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return errors.New("user not found")
 }

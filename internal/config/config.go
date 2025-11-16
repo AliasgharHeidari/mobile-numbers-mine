@@ -9,7 +9,8 @@ import (
 var AppConfig *Conf
 
 type Conf struct {
-	API API `yaml:"api"`
+	API   API         `yaml:"api"`
+	Redis RedisConfig `yaml:"redis"`
 }
 
 func InitConfig() {
